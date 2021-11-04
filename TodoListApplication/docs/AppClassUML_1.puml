@@ -1,0 +1,140 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+TodoListApplication --|> Application
+TodoController --* Application
+AddController --* Application
+EditController --* Application
+Item --* ItemList
+ItemList --o TodoController
+ItemList --o AddController
+ItemList --o EditController
+ItemList --o TodoListApplication
+StageManager --o TodoListApplication
+StageManager --o TodoController
+StageManager --o AddController
+StageManager --o EditController
+ItemManager --o TodoController
+ItemManager --o AddController
+ItemManager --o EditController
+ItemList --o ListManager
+ListManager --* TodoController
+
+class ItemList{
+-ItemList()
+-ArrayList<Item> itemsList
+-ArrayList<Item> tempList
++List<Item> getList()
++Item getItemNum(int itemNum)
++boolean removeBool(boolean remove)
++void addItem(Item addItem)
++void removeItem(int itemNum)
++void editItem(int itemNum, Item newItem)
++void clearList()
++void changeComplete(int itemNum)
++void sortList()
++void backupList()
++void restoreList()
+}
+
+class ItemManager{
+-int itemNumber
+-ItemManager()
++int getItemNumber()
++void setItemNumber(int newNum)
+}
+
+class TodoListApplication{
++void start(Stage primaryStage)
++void main(String[] args)
+}
+
+class ListManager{
++void listFromFile(File listFile)
++void listToFile(File file)
+}
+
+class Item{
+-String desc
+-String due
+-boolean complete
++void setItem(String desc, String due, boolean complete)
++String getDesc()
++String getDue()
++boolean getComplete()
+}
+
+class StageManager{
+-Stage mainStage
+-ArrayList<Scene> scenes
++void setSceneList()
++void setStage(Stage stage)
++void changeScene(int sceneNum, String title)
+}
+
+class TodoController{
+-Label descLabel
+-Label dueLabel
+-Label itemNumLabel
+-Label errorLabel
+-Label extraDesc1
+-Label extraDesc2
+-Label itemCount
+-TextField searchBar
+-CheckBox incCheck
+-CheckBox compCheck
+-CheckBox completion
+-Button listSelect
+-Button addNew
+-Button editItem
+-Button saveList
+-String NOLIST
+-String ITEMSTRING
++void initialize(URL location, ResourceBundle resources)
++void disableButtons(boolean onOff)
++void changeCurrentItem(int newItemNum)
++void updateItem(Item item, int itemNum)
+#void incompleteCheck()
+#void completeCheck()
+#void onPrevClick()
+#void onNextClick()
+#void onClearClick()
+#void onListSelectClick()
+#void onSaveClick()
+#void onRemoveClick()
+#void onSearchPress()
+#void onSortClick()
+#onAddClick()
+#onEditClick()
+#onCompAction()
+}
+
+class EditController{
+-TextArea descText
+-datePicker dueDate
+-CheckBox completion
+-Label errorLabel
+-Label countLabel
++void initialize(URL location, ResourceBundle resources)
+#void onDescType()
+#void onBackClick()
+#void onClearClick()
+#onSaveClick()
+
+}
+
+class AddController{
+-TextArea descText
+-DatePicker dueDate
+-CheckBox completion
+-Label errorLabel
+-Label countLabel
++boolean dateTrack
+#void onDateClick()
+#void onBackClick()
+#void onClearClick()
+#void onDescType
+#void onSaveClick()
+}
+
+@enduml

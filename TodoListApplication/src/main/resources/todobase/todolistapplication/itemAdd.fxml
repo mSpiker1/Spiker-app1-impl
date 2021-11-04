@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.AddController">
+   <children>
+      <Button mnemonicParsing="false" onAction="#onBackClick" text="&lt; Back to Main Menu" translateX="5.0" translateY="5.0" />
+      <Label text="Enter item description:" translateX="5.0" translateY="20.0" />
+      <TextArea fx:id="descText" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onDescType" prefHeight="200.0" prefWidth="580.0" translateX="10.0" translateY="20.0" />
+      <Label text="Enter item due date (optional):" translateX="200.0" translateY="40.0" />
+      <DatePicker fx:id="dueDate" onAction="#onDateClick" translateX="195.0" translateY="40.0" />
+      <CheckBox fx:id="completion" mnemonicParsing="false" text="Item is complete" translateX="224.0" translateY="45.0" />
+      <Button mnemonicParsing="false" onAction="#onSaveClick" text="Save Item" translateX="245.0" translateY="60.0" />
+      <Button mnemonicParsing="false" onAction="#onClearClick" text="Clear Due Date" translateX="380.0" translateY="-27.0" />
+      <Label fx:id="errorLabel" textFill="#c33131" translateX="150.0" translateY="-85.0" />
+      <Label fx:id="countLabel" text="Character count: 0/256" textFill="#838383" translateX="13.0" translateY="-106.0" />
+   </children>
+</VBox>

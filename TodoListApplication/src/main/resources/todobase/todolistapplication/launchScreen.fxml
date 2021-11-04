@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" translateY="290.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.TodoController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <Button fx:id="listSelect" mnemonicParsing="false" onAction="#onListSelectClick" text="Select a new list" translateX="-225.0" translateY="20.0" />
+      <Button fx:id="addNew" mnemonicParsing="false" onAction="#onAddClick" text="Add a new item" translateX="225.0" translateY="-25.0" />
+      <CheckBox fx:id="incCheck" mnemonicParsing="false" onAction="#incompleteCheck" selected="true" text="Show Incomplete Items" translateX="-200.0" />
+      <CheckBox fx:id="compCheck" mnemonicParsing="false" onAction="#completeCheck" selected="true" text="Show Complete Items" translateX="-204.0" translateY="-60.0" />
+      <ToolBar translateY="-30.0">
+         <items>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <effect>
+                  <Bloom />
+               </effect>
+            </HBox>
+         </items>
+      </ToolBar>
+      <Label fx:id="itemNumLabel" text="Item #0" translateX="-210.0" translateY="-180.0" />
+      <ButtonBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="125.0" prefWidth="560.0" translateY="-178.0">
+        <buttons>
+            <Button mnemonicParsing="false" onAction="#onRemoveClick" text="Remove Item" translateX="-176.0" translateY="10.0" />
+            <Button mnemonicParsing="false" onAction="#onPrevClick" text="Previous" translateX="-273.0" translateY="-20.0" />
+          <Button mnemonicParsing="false" onAction="#onNextClick" text="Next" translateX="91.0" translateY="-20.0" />
+            <Button fx:id="editItem" mnemonicParsing="false" onAction="#onEditClick" text="Edit Item" translateX="-6.0" translateY="10.0" />
+        </buttons>
+      </ButtonBar>
+      <CheckBox fx:id="completion" mnemonicParsing="false" onAction="#onCompAction" text="Completed" translateY="-200.0" />
+      <Button mnemonicParsing="false" onAction="#onClearClick" text="Clear all items from list" translateY="-205.0" />
+      <Button fx:id="saveList" mnemonicParsing="false" onAction="#onSaveClick" text="Save" translateX="250.0" translateY="-235.0" />
+      <Label fx:id="descLabel" text="No description available" translateY="-469.0" wrapText="true" VBox.vgrow="NEVER" />
+      <Label fx:id="dueLabel" text="No due date" translateY="-420.0" />
+      <Label fx:id="errorLabel" textFill="#c33131" translateY="-428.0" />
+      <Label fx:id="extraDesc1" translateY="-564.0" />
+      <Label fx:id="extraDesc2" translateY="-584.0" />
+      <Button mnemonicParsing="false" onAction="#onSortClick" text="Sort by date" translateX="-225.0" translateY="-465.0" />
+      <TextField fx:id="searchBar" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSearchPress" promptText="Search for an Item or #" translateY="-728.0" />
+      <Label fx:id="itemCount" text="Total items: 0" translateX="210.0" translateY="-764.0" />
+   </children>
+</VBox>
