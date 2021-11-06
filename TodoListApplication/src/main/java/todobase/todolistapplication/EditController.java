@@ -7,10 +7,7 @@ package todobase.todolistapplication;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,6 +23,8 @@ public class EditController implements Initializable{
     private Label errorLabel;
     @FXML
     private Label countLabel;
+    @FXML
+    private Button saveButton;
 
     //class to set parameters on launch
     public void initialize(URL location, ResourceBundle resources){
@@ -51,10 +50,14 @@ public class EditController implements Initializable{
         //store the length of the description text in an int variable
         int length = descText.getText().length();
 
-        //if length is greater than 256, display error
+        //if length is greater than 256, display error and disable save button
         if (length > 256) {
             errorLabel.setText("Error: description must be between 1 and 256 characters");
-        } else errorLabel.setText("");
+            saveButton.setDisable(true);
+        } else { //else reset error label and make sure save button is enabled
+            errorLabel.setText("");
+            saveButton.setDisable(false);
+        }
 
         //update the character count label with the new number of characters
         countLabel.setText("Character count: " + length + "/256");

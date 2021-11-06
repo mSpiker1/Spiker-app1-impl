@@ -56,6 +56,9 @@ public class TodoController implements Initializable{
     private static final String NOLIST = "Error: no list currently loaded";
     private static final String NOCOMPLETE = "Error: no complete items to display";
     private static final String NOINCOMPLETE = "Error: no incomplete items to display";
+    private static final String INVALIDLIST = "Error: list is invalid, cannot load";
+    private static final String INVALIDITEM = "Error: an item in that list is invalid, cannot load";
+    private static final String MISSINGPARAM = "Error: an item in that list is missing values, cannot load";
 
     //initialize method to run when scene is loaded
     public void initialize(URL location, ResourceBundle resources){
@@ -286,7 +289,26 @@ public class TodoController implements Initializable{
         File newList = selectList.showOpenDialog(files);
 
         //call the listFromFile method from ListManager to replace the existing list with the new one from the file
-        lm.listFromFile(newList);
+        //set int errorNum to the methods return value to check for errors when loading the list
+        int errorNum = lm.listFromFile(newList);
+
+        //if any error is returned, follow this if statement
+        if(errorNum != 0){
+            //clear the item list
+            ItemList.clearList();
+
+            //display errors according to the return value and then end the method
+            if(errorNum == 1){
+                errorLabel.setText(INVALIDLIST);
+                return;
+            } else if(errorNum == 2){
+                errorLabel.setText(INVALIDITEM);
+                return;
+            } else if(errorNum == 3){
+                errorLabel.setText(MISSINGPARAM);
+                return;
+            }
+        }
 
         //reset the currently displayed item to the first in the list to update the list as it is loaded
         changeCurrentItem(1);

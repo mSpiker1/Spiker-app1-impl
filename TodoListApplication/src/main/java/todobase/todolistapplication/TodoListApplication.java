@@ -33,8 +33,12 @@ public class TodoListApplication extends Application {
 
 //class to manage files
 class ListManager{
-    //method to load an arraylist from a text file
-    public void listFromFile(File listFile) throws IOException {
+    //method to load an arraylist from a text file, returns an int other than 0 to represent an error
+    //error list:
+    //1 - invalid list is not readable(general)
+    //2 - invalid item in list
+    //3 - an item or item parameter is missing from the list
+    public int listFromFile(File listFile) throws IOException {
         //create a fileReader to read through the values in the selected file, in a try statement
         try(BufferedReader reader = new BufferedReader(new FileReader(listFile))) {
             //clear the current list
@@ -45,20 +49,57 @@ class ListManager{
                 //create a new Item
                 Item addItem = new Item();
 
-                //create a return mark for the reader
-                reader.mark(10);
-
-                //break the loop if the reader encounters whitespace on the next line
-                String spaceTest = reader.readLine();
-                if(spaceTest == null){break;}
-
-                //reset the reader to the mark set earlier
-                reader.reset();
-
-                //write the three item parameters from the file to strings (desc, due, complete)
+                //if else to ensure a proper description is read, if item is invalid, return error # and close method
                 String desc = reader.readLine();
+                if(desc == null || desc.isEmpty()){ //if the item description is null
+                    //if on the first for loop
+                    if(i == 0){
+                        //return 1, the list is not valid if item 1 has a blank description
+                        return 1;
+                    } else{
+                        //if the next line has text, return missing value error
+                        //note that I am not using a mark for this as I know the method is ending anyways
+                        String temp = reader.readLine();
+                        if(temp != null){
+                            return 3;
+                        } else{
+                            //otherwise, break the for loop as the list has ended
+                            break;
+                        }
+                    }
+                } else if(desc.length() > 256){ //if the length of an item is greater than 256 characters
+                    //return 2, the list has an invalid item and cannot be opened
+                    return 2;
+                }
+
+                //if else to ensure a proper date is read, if item is invalid, return error # and close method
                 String due = reader.readLine();
+                //if due does not match yyyy-mm-dd, yyyy-m-dd, yyyy-mm-d, or yyyy-m-d format
+                if(due == null){
+                    //return 3, the due date for the item is missing
+                    return 3;
+                //if due does not match yyyy-mm-dd, yyyy-m-dd, yyyy-mm-d, or yyyy-m-d format, or is not "No due date"
+                } else if (!due.matches("\\d{4}-\\d{2}-\\d{2}") && !due.matches("\\d{4}-\\d-\\d{2}") &&
+                !due.matches("\\d{4}-\\d-\\d") && !due.matches("\\d{4}-\\d{2}-\\d") &&
+                !due.equalsIgnoreCase("No due date")) {
+                    //return 2, the list has an invalid date in an item and cannot be opened
+                    return 2;
+                } else if(due.equalsIgnoreCase("no due date")){
+                    //if the due string is "no due date", set it to "No due date" for consistent casing across items
+                    due = "No due date";
+                }
+
+                //if else to ensure a proper completion value is read
                 String completeString = reader.readLine();
+                //if completeString is null
+                if(completeString == null){
+                    //return 3, the complete value for the item is missing
+                    return 3;
+                } else if(!completeString.equalsIgnoreCase("complete") &&
+                        !completeString.equalsIgnoreCase("incomplete")){
+                    //if completeString is not "complete" or "incomplete", return 2 as the value is invalid
+                    return 2;
+                }
 
                 //initialize a boolean that is true if the complete string equals "complete"
                 boolean completeBool = completeString.equals("complete");
@@ -69,12 +110,17 @@ class ListManager{
                 //add the new Item to the current list
                 ItemList.addItem(addItem);
 
-                //readline to skip a line, as there is one blank line between items in a file
-                //sonarlint doesn't like this, but I just need to skip the blank line between items in the file
-                //I do this because I want the text file to also be easily readable by the user outside the app
-                reader.readLine();
+                //make sure there is a blank line between items to match the correct list format
+                String blank = reader.readLine();
+
+                //if blank is not a blank string on i > 0
+                if(i > 0 && blank != null && !blank.isEmpty()) {
+                    return 1;
+                }
             }
         }
+        //return 0 if no errors were encountered and the method runs as intended
+        return 0;
     }
 
     //method to write an existing list to a text file

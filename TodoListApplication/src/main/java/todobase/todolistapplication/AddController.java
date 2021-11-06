@@ -6,10 +6,7 @@
 package todobase.todolistapplication;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 
 public class AddController {
     //initialize text area, date picker, completion checkbox, labels
@@ -23,6 +20,8 @@ public class AddController {
     private CheckBox completion;
     @FXML
     private Label errorLabel;
+    @FXML
+    private Button saveButton;
 
     //create a boolean "dateTrack to use to keep track of user interaction with the datepicker, set the false by default
     boolean dateTrack = false;
@@ -54,10 +53,14 @@ public class AddController {
         //store the length of the description text in an int variable
         int length = descText.getText().length();
 
-        //if length is greater than 256, display error
+        //if length is greater than 256, display error and disable save button
         if (length > 256) {
             errorLabel.setText("Error: description must be between 1 and 256 characters");
-        } else errorLabel.setText("");
+            saveButton.setDisable(true);
+        } else { //else reset error label and make sure save button is enabled
+            errorLabel.setText("");
+            saveButton.setDisable(false);
+        }
 
         //update the character count label with the new number of characters
         countLabel.setText("Character count: " + length + "/256");
@@ -75,6 +78,7 @@ public class AddController {
                 desc = descText.getText();
             } else {
                 //if the if statement fails, give an error and exit the method
+                //this is just in case the user finds a way around the save button being disabled over 256 characters
                 errorLabel.setText("Error: description must be between 1 and 256 characters");
                 return;
             }
