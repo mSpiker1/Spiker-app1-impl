@@ -7,14 +7,16 @@ public class ItemManager {
     }
 
     //initialize the private item number variable
+    private static int itemNumber = 0;
 
     //get method
     public static int getItemNumber(){
-        return 0;
+        return itemNumber;
     }
 
     //set method
     public static void setItemNumber(int newNum){
-        return;
+        //set the current item number to the new number
+        itemNumber = newNum;
     }
 }

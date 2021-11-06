@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 Matthew Spiker
+ */
+
 package todobase.todolistapplication;
 
 import javafx.fxml.FXML;
@@ -6,7 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,326 +51,469 @@ public class TodoController implements Initializable{
     @FXML
     private Button saveList;
 
-    //string constants for itemCount and error messages, so I don't have to retype them a bunch
+    //initialize string constants for itemCount and errors because sonarlint wants me to
+    private static final String ITEMSTRING = "Total items: ";
+    private static final String NOLIST = "Error: no list currently loaded";
+    private static final String NOCOMPLETE = "Error: no complete items to display";
+    private static final String NOINCOMPLETE = "Error: no incomplete items to display";
 
-    //initialize method; runs whenever the scene is loaded
+    //initialize method to run when scene is loaded
     public void initialize(URL location, ResourceBundle resources){
-        //if statement to check if the list is empty
+        //if statement to check if the list has items
+        if(!ItemList.getList().isEmpty()){
+            //set item number to 1 if item number is not already set
+            if(ItemManager.getItemNumber() <= 0){
+                ItemManager.setItemNumber(1);
+            }
 
-            //if the list is not empty, check if the current Item number is 0
+            //change the currently displayed item to the current item number
+            changeCurrentItem(ItemManager.getItemNumber());
+        }
 
-                //if the current Item is 0, set it to 1
-
-            //change the currently displayed Item to the current Item Number from ItemManager
-
-        //update the total item count
+        //update the item count
+        itemCount.setText(ITEMSTRING + ItemList.getList().size());
     }
 
     //instructions for incomplete checkbox
     @FXML
     protected void incompleteCheck(){
         //check if the box is being checked or unchecked
+        if(incCheck.isSelected()){
+            //determine if the complete checkbox is already selected or not
+            if(compCheck.isSelected()){ //if both are checked
+                //restore the main list and set the item number to 1
+                ItemList.restoreList();
+                changeCurrentItem(1);
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
 
-            //determine if the complete checkbox is already checked or not
+                //enable list editing buttons
+                disableButtons(false);
+            } else{ //if inc is being checked and comp is not
+                //restore the main list, then remove all completed items
+                ItemList.restoreList();
+                ItemList.removeBool(true);
 
-                //if both are checked, restore the main list and set the item number to 1
+                //update item count and change current item to 1
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
+                changeCurrentItem(1);
+            }
+        } else{
+            if(compCheck.isSelected()){ //if inc is deselected and comp is selected already
+                //back up the main list
+                ItemList.backupList();
 
-                //enable the list editing buttons
+                //remove all incomplete items from the list
+                int verify = ItemList.removeBool(false);
 
-            //else if complete is not checked while incomplete is being checked
+                //ends method with error if list is empty, or list is only of one complete type
+                if(verify == 1){
+                    //set error label
+                    errorLabel.setText(NOLIST);
 
-                //restore the main list, then remove all complete items
+                    //reset incomplete to checked
+                    incCheck.setSelected(true);
 
-                //update the item count and change the current Item to 1
+                    //end method
+                    return;
+                } else if(verify == 2){
+                    //set error label
+                    errorLabel.setText(NOCOMPLETE);
 
-        //else if incomplete is being unchecked
+                    //reset incomplete to checked
+                    incCheck.setSelected(true);
 
-            //determine if the complete checkbox is already checked or not
+                    //end method
+                    return;
+                }
 
-                //if complete is already checked, back up the main list
+                //disable all list editing buttons
+                disableButtons(true);
 
-                //try to remove all incomplete items from the list
-
-                //display an error if the list is empty and end the method
-
-                //otherwise, disable all list editing buttons
-
-                //update item count and change current Item to 1
-
-            //else if complete is not checked and incomplete is being unchecked
-
+                //update item count and change to item 1
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
+                changeCurrentItem(1);
+            } else{ //if neither are checked when inc is deselected
                 //clear the entire list
+                ItemList.clearList();
+                onClearClick();
+            }
+        }
     }
 
     //instructions for complete checkbox
     @FXML
     protected void completeCheck(){
         //check if the box is being checked or unchecked
-
-            //check if incomplete is checked or unchecked
-
-                //if both are checked, restore the main list
+        if(compCheck.isSelected()){
+            if(incCheck.isSelected()){ //if both are checked when comp is being checked
+                //restore the main list
+                ItemList.restoreList();
 
                 //enable list editing buttons
+                disableButtons(false);
 
-                //update item count and change current Item to 1
-
-            //else if incomplete is unchecked while complete is being checked
-
+                //update item count and change current item to 1
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
+                changeCurrentItem(1);
+            }else{ //if inc is unchecked when comp is being checked
                 //restore the main list, then remove all incomplete items
+                ItemList.restoreList();
+                ItemList.removeBool(false);
 
-                //update the item count and change current Item to 1
+                //update item count and change current item to 1
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
+            }
+        } else{
+            if(incCheck.isSelected()){ //if inc is checked when comp is being unchecked
+                //backup the main list
+                ItemList.backupList();
 
-        //else if the box is being unchecked
+                //remove all completed items from the list
+                int verify = ItemList.removeBool(true);
 
-            //check if incomplete is checked or unchecked
+                //ends method with error if list is empty, or list is only of one complete type
+                if(verify == 1){
+                    //set error label
+                    errorLabel.setText(NOLIST);
 
-                //if incomplete is checked when comp is being unchecked, backup the main list
+                    //reset incomplete to checked
+                    compCheck.setSelected(true);
 
-                //try to remove all complete items from the list
+                    //end method
+                    return;
+                } else if(verify == 2){
+                    //set error label
+                    errorLabel.setText(NOINCOMPLETE);
 
-                //check if the item list is empty, end method with error if it is empty
+                    //reset incomplete to checked
+                    incCheck.setSelected(true);
+
+                    //end method
+                    return;
+                }
 
                 //disable list editing buttons
+                disableButtons(true);
 
-                //update item count and change current Item to 1
-
-            //else if incomplete is unchecked while complete is being unchecked
-
+                //update item count and change current item to 1
+                itemCount.setText(ITEMSTRING + ItemList.getList().size());
+                changeCurrentItem(1);
+            } else{ //if both are unchecked when comp is being unchecked
                 //clear the entire list
+                ItemList.clearList();
+                onClearClick();
+            }
+        }
     }
 
-    //instructions for when "previous" is clicked
+    //method to disable or enable list editing buttons based on boolean parameter
+    public void disableButtons(boolean onOff){
+        completion.setDisable(onOff);
+        listSelect.setDisable(onOff);
+        addNew.setDisable(onOff);
+        editItem.setDisable(onOff);
+        saveList.setDisable(onOff);
+    }
+
+    //instructions for when "previous" button is clicked
     @FXML
     protected void onPrevClick(){
-        //check if the current item number is the beginning of the list
-
-            //change the current item to the last item if at the beginning of the list
-
-        //else if the list is empty
-
-            //display NOLIST error message if the list is empty
-
-        //else
-
-            //change the current item to the one below it in the Item list
+        //test to see if the current item number is the beginning of the list, or if the list is empty
+        if(ItemManager.getItemNumber() == 1){
+            //change item to final item if at the beginning of the list
+            changeCurrentItem(ItemList.getList().size());
+        } else if(ItemList.getList().isEmpty()){
+            //display error message if the list is empty
+            errorLabel.setText(NOLIST);
+        } else {
+            //change the current item to the one below it in the list
+            changeCurrentItem(ItemManager.getItemNumber() - 1);
+        }
     }
 
-    //instructions for when "next" is clicked
+    //instructions for when "next" button is clicked
     @FXML
     protected void onNextClick(){
-        //check if the list is empty
-
+        //test to see if the current item number is the end of the list, or if the list is empty
+        if(ItemList.getList().isEmpty()) {
             //display error message if the list is empty
-
-        //else if the current item is at the end of the list
-
-            //change the current Item to 1
-
-        //else
-
-            //change the current Item to the one above it in the Item list
+            errorLabel.setText(NOLIST);
+        } else if(ItemList.getList().size() == ItemManager.getItemNumber()){
+            //move back to item 1
+            changeCurrentItem(1);
+        } else {
+            //change the current item to the one above it in the list
+            changeCurrentItem(ItemManager.getItemNumber() + 1);
+        }
     }
 
-    //instructions for when "clear all" is clicked
+    //instructions for when "Clear all items" button is pressed
     @FXML
     protected void onClearClick(){
-        //clear all Items from the list
+        //clear objects from the list
+        ItemList.clearList();
 
-        //update current item to -no Item to display- values and set total Items to 0
+        //update current item
+        descLabel.setText("No description available");
+        extraDesc1.setText("");
+        extraDesc2.setText("");
+        dueLabel.setText("No due date");
+        completion.setSelected(false);
+        errorLabel.setText("");
+        itemNumLabel.setText("Item #0");
+        ItemManager.setItemNumber(0);
+        itemCount.setText("Total items: 0");
     }
 
-    //instructions for when "select a new list" is clicked
+    //instructions for when "Select a new list" is clicked
     @FXML
-    protected void onListSelectClick(){
-        //create a new stage for a fileChooser
+    protected void onListSelectClick() throws IOException {
+        //create a new stage
+        Stage files = new Stage();
 
         //create an object to reference ListManager class
+        ListManager lm = new ListManager();
 
-        //create a fileChooser and a File object to store the location of the chosen file
+        //create a fileChooser object and a File object to store the chosen file
+        FileChooser selectList = new FileChooser();
 
-        //set starting directory of the fileChooser
+        //set starting directory
+        File startDir = new File("data");
+        selectList.setInitialDirectory(startDir);
 
-        //launch the fileChooser in a new window
+        //launch filechooser
+        selectList.setTitle("Choose a list from your files");
+        File newList = selectList.showOpenDialog(files);
 
-        //call the listFromFile method from ListManager to replace the current list with the new one from the file
+        //call the listFromFile method from ListManager to replace the existing list with the new one from the file
+        lm.listFromFile(newList);
 
-        //reset the currently displayed Item to 1 and update the total item count
+        //reset the currently displayed item to the first in the list to update the list as it is loaded
+        changeCurrentItem(1);
+
+        //update the item count
+        itemCount.setText(ITEMSTRING + ItemList.getList().size());
     }
 
-    //instructions for when "save" is clicked
+    //instructions for when the "Save" button is clicked
     @FXML
-    protected void onSaveClick(){
-        //check if the Item list is empty
-
-            //if the list is empty, display the NOLIST error
-
-        //else if the list is not empty
-
+    protected void onSaveClick() {
+        //if statement to test if the arraylist is not empty
+        if(!ItemList.getList().isEmpty()) {
             //create a new stage
+            Stage files = new Stage();
 
-            //create a fileChooser object
+            //create a filechooser object
+            FileChooser saveFile = new FileChooser();
+            saveFile.setTitle("Save your list to a file");
 
-            //set the fileChooser to default to a text file
+            //set the filechooser to default to a text file
+            saveFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Documents", "*.txt"));
 
-            //set the starting directory of the fileChooser
+            //set default filechooser starting directory
+            File startDir = new File("data");
+            saveFile.setInitialDirectory(startDir);
 
             //open the stage and create a file object where the user wants
+            File file = saveFile.showSaveDialog(files);
 
-            //call the listToFile method with the previously created file object as the parameter in a try statement
+            //call the listToFile method using the previously created file object
+            try {
+                ListManager.listToFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else errorLabel.setText(NOLIST); //displays error if list is empty, nothing to save
     }
 
-    //instructions for when "remove" is clicked
+    //instructions for when the "remove" button is clicked
     @FXML
     protected void onRemoveClick(){
-        //big if else tree to catch any errors when removing an item ahead, this is just a comment and does not signify a line
+        //this huge if else tree is to ensure no errors are met when removing an item
+        if(ItemList.getList().isEmpty()){
+            //display an error if there is no list currently loaded
+            errorLabel.setText(NOLIST);
+        } else if(ItemList.getList().size() == 2){
+            //if the size of the list is 2, make sure the item number gets reset back to 1
+            if(ItemManager.getItemNumber() == 2){
+                //remove the previous item in the list (the one that remove was originally clicked on)
+                //note this uses 1 instead of 2 because it's dealing directly with the arraylist, which starts at 0
+                ItemList.removeItem(1);
+            } else{
+                //move to the second item in the list if on item #1
+                changeCurrentItem(2);
 
-        //if the current item list is empty
+                //remove the first item in the list, then update the remaining item to be item #1
+                //note this uses 0 instead of 1 because it's dealing directly with the arraylist, which starts at 0
+                ItemList.removeItem(0);
+            }
+            changeCurrentItem(1);
+        } else if(ItemList.getList().size() == 1){
+            //if the size of the list is 1, just call the clearList method
+            onClearClick();
+        } else if(ItemList.getList().size() == ItemManager.getItemNumber()){
+            //move to the previous item in the list IF at the end of the list
+            changeCurrentItem(ItemManager.getItemNumber() - 1);
 
-            //display the NOLIST error
+            //remove the previous item in the list (the one that remove was originally clicked on)
+            ItemList.removeItem(ItemManager.getItemNumber());
+        } else{
+            //remove the previous item in the list (the one that remove was originally clicked on)
+            ItemList.removeItem(ItemManager.getItemNumber() - 1);
 
-        //else if the size of the list is 2
+            //move to next item on the list
+            changeCurrentItem(ItemManager.getItemNumber());
+        }
 
-            //if current Item Number is 2
-
-                //remove the Item 2 from the list
-
-            //else if current Item Number is 1
-
-                //remove Item 1 from the list
-
-            //change current Item to 1
-
-        //else if the size of the list is 1
-
-            //clear the list
-
-        //else if current Item is at the end of the list
-
-            //change the current Item to one below
-
-            //remove the item at the end of the list
-
-        //else
-
-            //remove the current Item from the list
-
-            //change the current Item to the current Item Number
-
-        //update the total Item count
+        //update item count label
+        itemCount.setText(ITEMSTRING + ItemList.getList().size());
     }
 
-    //instructions for the search bar text field
+    //instructions for the search bar
     @FXML
     protected void onSearchPress(){
-        //grab the input from the search bar as a string
+        //grab the input from the search bar as a string, create a boolean variable to use later and listSize int
+        String search = searchBar.getText();
+        boolean isNum;
+        int listSize = ItemList.getList().size();
 
-        //create a boolean variable isNum and an int listSize that equals the size of the current list
-
-        //open try statement
-
+        //try to parse the string to a number
+        try{
             //parse search string to an integer
+            int stringNum = Integer.parseInt(search);
 
-            //if statement to determine if it is a number 1 - listSize
+            //if statement to determine if it is a number 1-listSize
+            isNum = stringNum <= listSize && stringNum >= 1;
+        } catch(NumberFormatException e){
+            isNum = false;
+        }
 
-                //if it is a number 1 - listSize, set isNum to true
-
-        //catch statement for NumberFormatException
-
-            //set isNum to false
-
-        //if isNum is false
-
+        //algorithm to find the best match for an item, or just pull up an item number if isNum is true
+        if(!isNum){
             //for loop to go through every item until a hit is found or the end of the list is reached
+            for(int i=1; i <= listSize; i++){
+                //test if item i's description contains the search string
+                if(ItemList.getItemNum(i).getDesc().contains(search)){
+                    //if the string is an exact match, set displayed item to item i and exit method
+                    if(ItemList.getItemNum(i).getDesc().equals(search)){
+                        changeCurrentItem(i);
+                        return;
+                    }
 
-                //if the current item contains the search string in its description
-
-                    //if the string is an exact match
-
-                        //change current Item to i and end the method
-
-                    //change current Item to i
-
-        //else if isNum is true
-
-            //change the current Item to the search string as a parsed integer
+                    //change the current item to item i, then end the method
+                    changeCurrentItem(i);
+                }
+            }
+        } else{
+            //change the current item to the search integer, then end the method
+            changeCurrentItem(Integer.parseInt(search));
+        }
     }
 
-    //instructions for when "sort" is clicked
+    //instructions for when the sort button is clicked
     @FXML
     protected void onSortClick(){
-        //if the list is empty
+        //verify that the list is not empty, end method if it is
+        if(ItemList.getList().isEmpty()){
+            //set error label
+            errorLabel.setText(NOLIST);
 
-            //display error NOLIST and end the method
+            //end method
+            return;
+        }
 
         //call the sort list function in ItemList
+        ItemList.sortList();
 
-        //update the current item to Item Number
+        //update the current item
+        changeCurrentItem(ItemManager.getItemNumber());
     }
 
-    //instructions for when "add" is clicked
+    //instructions for when the add button is clicked
     @FXML
     protected void onAddClick(){
-        //set the scene to itemAdd with title "Add a new Item"
+        //set the scene of the current stage to itemEditor with the title "Add a new Item"
+        StageManager sm = new StageManager();
+        sm.changeScene(1, "Add a New Item");
     }
 
-    //instructions for when "edit" is clicked
+    //instructions for when the edit button is clicked
     @FXML
     protected void onEditClick(){
-        //if the list is empty
-
-            //display NOLIST error
-
-        //else
-
-            //set the scene to itemEdit with the title "Edit an Item"
+        //if statement to ensure an item is selected first, otherwise displays an error message
+        if(!ItemList.getList().isEmpty()) {
+            //set the scene of the current stage to itemEditor with the title "Edit an Item"
+            StageManager sm = new StageManager();
+            sm.changeScene(2, "Edit an Item");
+        } else errorLabel.setText(NOLIST);
     }
 
-    //instructions for when the "completed" checkbox is interacted with
+    //instructions for when the checkbox is interacted with
     @FXML
     protected void onCompAction(){
-        //if list is empty
-
-            //display NOLIST error and set the checkbox to unchecked
-
-        //else
-
-            //change the boolean value of complete on the current Item by calling ItemList's changeComplete method
+        if(ItemList.getList().isEmpty()){
+            //display error message that no item is currently loaded
+            errorLabel.setText(NOLIST);
+            //sets the box to be unchecked
+            completion.setSelected(false);
+        }else {
+            //calls the changeComplete method in ItemList class to swap the value of the current item's completion
+            ItemList.changeComplete(ItemManager.getItemNumber() - 1);
+        }
     }
 
-    //method to change the currently displayed Item
+    //method to change the currently displayed item
     public void changeCurrentItem(int newItemNum){
-        //change current ItemNumber to newItemNum
+        //change the current item number
+        ItemManager.setItemNumber(newItemNum);
 
-        //get the item from the item list
+        //get the item
+        Item item = ItemList.getItemNum(ItemManager.getItemNumber());
 
-        //update the shown item using updateItem
+        //update the shown item
+        updateItem(item, ItemManager.getItemNumber());
     }
 
-    //method to update the currently displayed Item's parameters
+    //method to update the currently displayed item parameters
     public void updateItem(Item item, int itemNum){
-        //if item description's length > 85 characters
+        //if the itemDesc is 85 or more characters, split it up into two or three lines
+        if(item.getDesc().length() > 85){
+            //first remove any newline characters
+            String desc = item.getDesc();
+            desc = desc.replace("\n", " ");
 
-            //set the item's description to a string "itemDesc" and replace newline characters with a space
+            //split into either two or three lines
+            if(item.getDesc().length() > 172){
+                //split the string into three lines of max 86 characters
+                String d1 = desc.substring(0, 86);
+                String d2 = desc.substring(86, 172);
+                String d3 = desc.substring(172);
 
-            //if itemDesc.length > 172
+                //set the description labels to the strings
+                descLabel.setText(d1);
+                extraDesc1.setText(d2);
+                extraDesc2.setText(d3);
+            }else{
+                //split the string into two strings of max 86 characters
+                String d1 = desc.substring(0, 86);
+                String d2 = desc.substring(86);
 
-                //split itemDesc into three strings d1, d2, and d3, of max 86 characters
+                //set the description labels to the strings
+                descLabel.setText(d1);
+                extraDesc1.setText(d2);
+                extraDesc2.setText("");
+            }
+        } else {
+            descLabel.setText(item.getDesc());
+            extraDesc1.setText("");
+            extraDesc2.setText("");
+        }
 
-                //set descLabel, extraDesc1, and extraDesc2 to d1, d2, and d3, respectively
-
-            //else
-
-                //split itemDesc into two strings d1 and d2, of max 86 characters
-
-                //set descLabel and extraDesc1 to d1 and d2, respectively; set extraDesc2 to ""
-
-        //else
-
-            //set descLabel to the current item's description
-
-            //set both extraDesc1 and extraDesc2 to ""
-
-        //change all other relevant parameters (duedate, completion checkbox, item number, etc)
+        //change all other parameters and reset the error label
+        dueLabel.setText("Due: " + item.getDue());
+        completion.setSelected(item.getComplete());
+        itemNumLabel.setText("Item #" + itemNum);
+        ItemManager.setItemNumber(itemNum);
+        errorLabel.setText(" ");
     }
 }

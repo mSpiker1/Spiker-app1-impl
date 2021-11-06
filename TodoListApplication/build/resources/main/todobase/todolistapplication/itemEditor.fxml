@@ -9,7 +9,7 @@
       <Label text="Enter item description:" translateX="13.0" translateY="20.0" />
       <TextArea fx:id="descText" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onDescType" prefHeight="200.0" prefWidth="580.0" translateX="10.0" translateY="20.0" />
       <Label text="Enter item due date (optional):" translateX="200.0" translateY="40.0" />
-      <DatePicker fx:id="dueDate" onAction="#onDateClick" translateX="195.0" translateY="40.0" />
+      <DatePicker fx:id="dueDate" translateX="195.0" translateY="40.0" />
       <CheckBox fx:id="completion" mnemonicParsing="false" text="Item is complete" translateX="224.0" translateY="45.0" />
       <Button mnemonicParsing="false" onAction="#onSaveClick" text="Save Item" translateX="245.0" translateY="60.0" />
       <Button mnemonicParsing="false" onAction="#onClearClick" text="Remove Due Date" translateX="380.0" translateY="-27.0" />
