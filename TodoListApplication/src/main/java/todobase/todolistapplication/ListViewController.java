@@ -42,7 +42,7 @@ public class ListViewController implements Initializable {
         //I'm not 100% on how it works in all honesty, but I DO know that the sonarlint error is junk because TableCell
         //just has that many parents no matter how I code my program. That's just how the javafx hierarchy has it, not
         //me, so it can be safely ignored.
-        comCol.setCellFactory(col -> new TableCell<Item, Boolean>(){
+        comCol.setCellFactory(col -> new TableCell<>(){
             @Override
             protected void updateItem(Boolean item, boolean empty){
                 super.updateItem(item, empty);
