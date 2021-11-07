@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable{
@@ -33,8 +34,10 @@ public class EditController implements Initializable{
             //set the description text area
             descText.setText(ItemList.getItemNum(ItemManager.getItemNumber()).getDesc());
 
-            //set the due date text
-            dueDate.getEditor().setText(ItemList.getItemNum(ItemManager.getItemNumber()).getDue());
+            //set the due date value unless it is "No due date"
+            if(ItemList.getItemNum(ItemManager.getItemNumber()).getDue().equals("No due date")){
+                dueDate.getEditor().setText("");
+            }else dueDate.setValue(LocalDate.parse(ItemList.getItemNum(ItemManager.getItemNumber()).getDue()));
 
             //set the complete checkbox value
             completion.setSelected(ItemList.getItemNum(ItemManager.getItemNumber()).getComplete());
