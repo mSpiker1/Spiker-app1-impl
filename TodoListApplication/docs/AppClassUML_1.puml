@@ -10,6 +10,7 @@ ItemList --o TodoController
 ItemList --o AddController
 ItemList --o EditController
 ItemList --o TodoListApplication
+ItemList --o ListViewController
 StageManager --o TodoListApplication
 StageManager --o TodoController
 StageManager --o AddController
@@ -19,6 +20,7 @@ ItemManager --o AddController
 ItemManager --o EditController
 ItemList --o ListManager
 ListManager --* TodoController
+ListViewController --* Application
 
 class ItemList{
 -ItemList()
@@ -35,6 +37,10 @@ class ItemList{
 +void sortList()
 +void backupList()
 +void restoreList()
+}
+
+class ListViewController{
++void initialize(URL location, ResourceBundle resources)
 }
 
 class ItemManager{
