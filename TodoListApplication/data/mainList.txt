@@ -1,9 +1,9 @@
-This should be first
-2021-10-22
-complete
+Introduce myself
+2021-11-07
+incomplete
 
-second
-2021-11-12
+Show that all unit tests pass
+2021-11-07
 incomplete
 
 Due next year
@@ -11,7 +11,7 @@ Due next year
 incomplete
 
 Not due sort test
-No Due Date
+No due date
 incomplete
 
 Due next year earlier in the same month
@@ -398,50 +398,3 @@ Test Application
 2021-11-1
 incomplete
 
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete
-
-Test Application
-2021-11-1
-incomplete

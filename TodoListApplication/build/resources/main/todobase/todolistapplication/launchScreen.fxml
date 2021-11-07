@@ -51,14 +51,4 @@
       <TextField fx:id="searchBar" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSearchPress" promptText="Search for an Item or #" translateY="-735.0" />
       <Label fx:id="itemCount" text="Total items: 0" translateX="210.0" translateY="-764.0" />
    </children>
-   <effect>
-      <Lighting diffuseConstant="1.86" specularConstant="2.0" specularExponent="40.0" surfaceScale="0.0">
-         <bumpInput>
-            <Shadow />
-         </bumpInput>
-         <light>
-            <Light.Distant />
-         </light>
-      </Lighting>
-   </effect>
 </VBox>
