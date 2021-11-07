@@ -11,8 +11,8 @@
       <Label text="Enter item due date (optional):" translateX="200.0" translateY="40.0" />
       <DatePicker fx:id="dueDate" translateX="195.0" translateY="40.0" />
       <CheckBox fx:id="completion" mnemonicParsing="false" text="Item is complete" translateX="224.0" translateY="45.0" />
-      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveClick" text="Save Item" translateX="245.0" translateY="60.0" />
-      <Button mnemonicParsing="false" onAction="#onClearClick" text="Remove Due Date" translateX="380.0" translateY="-27.0" />
+      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveClick" text="Save item" translateX="245.0" translateY="60.0" />
+      <Button mnemonicParsing="false" onAction="#onClearClick" text="Clear due date" translateX="380.0" translateY="-27.0" />
       <Label fx:id="errorLabel" textFill="#c33131" translateX="150.0" translateY="-85.0" />
       <Label fx:id="countLabel" text="Character count: 0/256" textFill="#838383" translateX="13.0" translateY="-106.0" />
    </children>
