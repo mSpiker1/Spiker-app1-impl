@@ -25,11 +25,13 @@ public class StageManager {
         FXMLLoader mainMenuFxml = new FXMLLoader(TodoListApplication.class.getResource("launchScreen.fxml"));
         FXMLLoader addFxml = new FXMLLoader(TodoListApplication.class.getResource("itemAdd.fxml"));
         FXMLLoader editFxml = new FXMLLoader(TodoListApplication.class.getResource("itemEditor.fxml"));
+        FXMLLoader viewFxml = new FXMLLoader(TodoListApplication.class.getResource("listView.fxml"));
 
         //load scenes from fxml files
         scenes.add(new Scene(mainMenuFxml.load(), 600, 400));
         scenes.add(new Scene(addFxml.load(), 600, 400));
         scenes.add(new Scene(editFxml.load(), 600, 400));
+        scenes.add(new Scene(viewFxml.load(), 600, 800));
     }
 
     //stage setter method
@@ -54,5 +56,23 @@ public class StageManager {
         mainStage.setScene(scenes.get(sceneNum));
         mainStage.setTitle(title);
         mainStage.show();
+    }
+
+    //specific method for listview, as I wanted it in a separate window
+    public void launchListView(String title){
+        //create a new stage
+        Stage viewStage = new Stage();
+
+        //clear the scene array
+        scenes.clear();
+
+        //reload the scene array (this is to ensure initialize methods in controllers are run every time) with try/catch
+        try{setSceneList();}
+        catch(IOException e) {e.printStackTrace();}
+
+        //load the scene, title, and then show the scene
+        viewStage.setScene(scenes.get(3));
+        viewStage.setTitle(title);
+        viewStage.show();
     }
 }

@@ -61,6 +61,10 @@ public class TodoController implements Initializable{
     private static final String INVALIDITEM = "Error: an item in that list is invalid, cannot load";
     private static final String MISSINGPARAM = "Error: an item in that list is missing values, cannot load";
 
+    //initialize checkStatus int to keep track of which of the complete and incomplete checkboxes are selected
+    //0 = both, 1 = complete only, 2 = incomplete only, 3 = neither
+    private int checkStatus = 0;
+
     //initialize method to run when scene is loaded
     public void initialize(URL location, ResourceBundle resources){
         //if statement to check if the list has items
@@ -90,16 +94,18 @@ public class TodoController implements Initializable{
                 changeCurrentItem(1);
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
 
-                //enable list editing buttons
+                //enable list editing buttons and update checkStatus
                 disableButtons(false);
+                checkStatus = 0;
             } else{ //if inc is being checked and comp is not
                 //restore the main list, then remove all completed items
                 ItemList.restoreList();
                 ItemList.removeBool(true);
 
-                //update item count and change current item to 1
+                //update item count and change current item to 1; update checkStatud
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
                 changeCurrentItem(1);
+                checkStatus = 2;
             }
         } else{
             if(compCheck.isSelected()){ //if inc is deselected and comp is selected already
@@ -133,13 +139,15 @@ public class TodoController implements Initializable{
                 //disable all list editing buttons
                 disableButtons(true);
 
-                //update item count and change to item 1
+                //update item count and change to item 1; update checkStatus
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
                 changeCurrentItem(1);
+                checkStatus = 1;
             } else{ //if neither are checked when inc is deselected
-                //clear the entire list
+                //clear the entire list and update checkStatus
                 ItemList.clearList();
                 onClearClick();
+                checkStatus = 3;
             }
         }
     }
@@ -156,16 +164,18 @@ public class TodoController implements Initializable{
                 //enable list editing buttons
                 disableButtons(false);
 
-                //update item count and change current item to 1
+                //update item count and change current item to 1; update checkStatus
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
                 changeCurrentItem(1);
+                checkStatus = 0;
             }else{ //if inc is unchecked when comp is being checked
                 //restore the main list, then remove all incomplete items
                 ItemList.restoreList();
                 ItemList.removeBool(false);
 
-                //update item count and change current item to 1
+                //update item count and change current item to 1; update checkStatus
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
+                checkStatus = 1;
             }
         } else{
             if(incCheck.isSelected()){ //if inc is checked when comp is being unchecked
@@ -199,13 +209,15 @@ public class TodoController implements Initializable{
                 //disable list editing buttons
                 disableButtons(true);
 
-                //update item count and change current item to 1
+                //update item count and change current item to 1; update checkStatus
                 itemCount.setText(ITEMSTRING + ItemList.getList().size());
                 changeCurrentItem(1);
+                checkStatus = 2;
             } else{ //if both are unchecked when comp is being unchecked
-                //clear the entire list
+                //clear the entire list and update checkStatus
                 ItemList.clearList();
                 onClearClick();
+                checkStatus = 3;
             }
         }
     }
@@ -390,6 +402,25 @@ public class TodoController implements Initializable{
 
         //update item count label
         itemCount.setText(ITEMSTRING + ItemList.getList().size());
+    }
+
+    //instructions for view list button
+    @FXML
+    protected void onViewClick(){
+        //if statement to first ensure there is a list loaded
+        if(!ItemList.getList().isEmpty()){
+            //set the scene of the current stage to listView with the title "Viewing full list"
+            StageManager sm = new StageManager();
+
+            //open listview with different titles depending on checkStatus
+            if(checkStatus == 0){
+                sm.launchListView("Viewing full list of items");
+            } else if(checkStatus == 1){
+                sm.launchListView("Viewing all completed items");
+            } else if(checkStatus ==2){
+                sm.launchListView("Viewing all incomplete items");
+            }
+        } else errorLabel.setText(NOLIST);
     }
 
     //instructions for the search bar

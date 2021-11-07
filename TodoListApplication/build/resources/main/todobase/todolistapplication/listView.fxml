@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.ListViewController">
+   <children>
+      <TableView fx:id="listTable" fixedCellSize="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0">
+         <columns>
+            <TableColumn fx:id="descCol" prefWidth="395.0" text="Item Description" />
+            <TableColumn fx:id="dateCol" prefWidth="108.0" text="Due Date" />
+            <TableColumn fx:id="comCol" prefWidth="96.0" text="Completed" />
+         </columns></TableView>
+   </children>
+</AnchorPane>

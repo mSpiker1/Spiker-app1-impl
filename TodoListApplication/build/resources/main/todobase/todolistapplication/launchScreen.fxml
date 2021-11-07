@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" scaleShape="false" spacing="20.0" translateY="255.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.TodoController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" scaleShape="false" spacing="20.0" translateY="285.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.TodoController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -50,5 +50,6 @@
       <Button mnemonicParsing="false" onAction="#onSortClick" text="Sort by date" translateX="-225.0" translateY="-465.0" />
       <TextField fx:id="searchBar" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSearchPress" promptText="Search for an Item or #" translateY="-735.0" />
       <Label fx:id="itemCount" text="Total items: 0" translateX="231.0" translateY="-630.0" />
+      <Button mnemonicParsing="false" onAction="#onViewClick" text="View full list" translateY="-850.0" />
    </children>
 </VBox>
