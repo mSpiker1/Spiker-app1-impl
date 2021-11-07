@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="TodoApp">
+    <output-path>$PROJECT_DIR$/../../../Standalone_executables</output-path>
+    <root id="root">
+      <element id="archive" name="TodoApp.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/../../../Standalone_executables/TodoApp/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

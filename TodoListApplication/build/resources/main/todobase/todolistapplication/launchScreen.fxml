@@ -4,8 +4,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" translateY="255.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.TodoController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" scaleShape="false" spacing="20.0" translateY="255.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todobase.todolistapplication.TodoController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -14,7 +15,7 @@
       <Button fx:id="addNew" mnemonicParsing="false" onAction="#onAddClick" text="Add a new item" translateX="225.0" translateY="-25.0" />
       <CheckBox fx:id="incCheck" mnemonicParsing="false" onAction="#incompleteCheck" selected="true" text="Show Incomplete Items" translateX="-200.0" />
       <CheckBox fx:id="compCheck" mnemonicParsing="false" onAction="#completeCheck" selected="true" text="Show Complete Items" translateX="-204.0" translateY="-60.0" />
-      <ToolBar translateY="-30.0">
+      <ToolBar scaleY="1.07" translateY="-30.0">
          <items>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <effect>
@@ -22,6 +23,12 @@
                </effect>
             </HBox>
          </items>
+         <effect>
+            <InnerShadow height="26.93" radius="12.965" width="26.93">
+               <color>
+                  <Color opacity="0.539130449295044" />
+               </color></InnerShadow>
+         </effect>
       </ToolBar>
       <Label fx:id="itemNumLabel" text="Item #0" translateX="-210.0" translateY="-180.0" />
       <ButtonBar maxHeight="-Infinity" minHeight="-Infinity" prefHeight="125.0" prefWidth="560.0" translateY="-178.0">
@@ -41,7 +48,17 @@
       <Label fx:id="extraDesc1" translateY="-564.0" />
       <Label fx:id="extraDesc2" translateY="-584.0" />
       <Button mnemonicParsing="false" onAction="#onSortClick" text="Sort by date" translateX="-225.0" translateY="-465.0" />
-      <TextField fx:id="searchBar" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSearchPress" promptText="Search for an Item or #" translateY="-728.0" />
+      <TextField fx:id="searchBar" maxWidth="-Infinity" minWidth="-Infinity" onKeyReleased="#onSearchPress" promptText="Search for an Item or #" translateY="-735.0" />
       <Label fx:id="itemCount" text="Total items: 0" translateX="210.0" translateY="-764.0" />
    </children>
+   <effect>
+      <Lighting diffuseConstant="1.86" specularConstant="2.0" specularExponent="40.0" surfaceScale="0.0">
+         <bumpInput>
+            <Shadow />
+         </bumpInput>
+         <light>
+            <Light.Distant />
+         </light>
+      </Lighting>
+   </effect>
 </VBox>
