@@ -79,9 +79,7 @@ class ListManager{
                     //return 3, the due date for the item is missing
                     return 3;
                 //if due does not match yyyy-mm-dd, yyyy-m-dd, yyyy-mm-d, or yyyy-m-d format, or is not "No due date"
-                } else if (!due.matches("\\d{4}-\\d{2}-\\d{2}") && !due.matches("\\d{4}-\\d-\\d{2}") &&
-                !due.matches("\\d{4}-\\d-\\d") && !due.matches("\\d{4}-\\d{2}-\\d") &&
-                !due.equalsIgnoreCase("No due date")) {
+                } else if (!due.matches("\\d{4}-\\d{2}-\\d{2}") && !due.equalsIgnoreCase("No due date")) {
                     //return 2, the list has an invalid date in an item and cannot be opened
                     return 2;
                 } else if(due.equalsIgnoreCase("no due date")){
